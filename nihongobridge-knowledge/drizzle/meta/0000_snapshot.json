@@ -1,0 +1,4153 @@
+{
+  "id": "3d97f6cb-b610-450c-aa71-b95874f32c3a",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.dictionary_entries": {
+      "name": "dictionary_entries",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "word": {
+          "name": "word",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kana": {
+          "name": "kana",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "romaji": {
+          "name": "romaji",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "furigana": {
+          "name": "furigana",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "meanings": {
+          "name": "meanings",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "part_of_speech": {
+          "name": "part_of_speech",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "pitch_accent": {
+          "name": "pitch_accent",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frequency_rank": {
+          "name": "frequency_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "synonyms": {
+          "name": "synonyms",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "antonyms": {
+          "name": "antonyms",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "example_sentence_ids": {
+          "name": "example_sentence_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "grammar_ids": {
+          "name": "grammar_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "kanji_ids": {
+          "name": "kanji_ids",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "audio_url": {
+          "name": "audio_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {
+        "dictionary_entries_source_source_id_uidx": {
+          "name": "dictionary_entries_source_source_id_uidx",
+          "columns": [
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"dictionary_entries\".\"source_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dictionary_entries_word_idx": {
+          "name": "dictionary_entries_word_idx",
+          "columns": [
+            {
+              "expression": "word",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dictionary_entries_kana_idx": {
+          "name": "dictionary_entries_kana_idx",
+          "columns": [
+            {
+              "expression": "kana",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dictionary_entries_jlpt_frequency_idx": {
+          "name": "dictionary_entries_jlpt_frequency_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "frequency_rank",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dictionary_entries_word_trgm_idx": {
+          "name": "dictionary_entries_word_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"word\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_kana_trgm_idx": {
+          "name": "dictionary_entries_kana_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"kana\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_romaji_trgm_idx": {
+          "name": "dictionary_entries_romaji_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"romaji\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_meanings_gin_idx": {
+          "name": "dictionary_entries_meanings_gin_idx",
+          "columns": [
+            {
+              "expression": "meanings",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_furigana_gin_idx": {
+          "name": "dictionary_entries_furigana_gin_idx",
+          "columns": [
+            {
+              "expression": "furigana",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_pos_gin_idx": {
+          "name": "dictionary_entries_pos_gin_idx",
+          "columns": [
+            {
+              "expression": "part_of_speech",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_tags_gin_idx": {
+          "name": "dictionary_entries_tags_gin_idx",
+          "columns": [
+            {
+              "expression": "tags",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_kanji_ids_gin_idx": {
+          "name": "dictionary_entries_kanji_ids_gin_idx",
+          "columns": [
+            {
+              "expression": "kanji_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "dictionary_entries_fts_idx": {
+          "name": "dictionary_entries_fts_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('simple', coalesce(\"word\", '')), 'A') ||\n        setweight(to_tsvector('simple', coalesce(\"kana\", '') || ' ' || coalesce(\"romaji\", '')), 'B') ||\n        setweight(to_tsvector('english', coalesce(\"meanings\"::text, '')), 'C')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "dictionary_entries_frequency_rank_check": {
+          "name": "dictionary_entries_frequency_rank_check",
+          "value": "\"dictionary_entries\".\"frequency_rank\" IS NULL OR \"dictionary_entries\".\"frequency_rank\" > 0"
+        },
+        "dictionary_entries_word_not_blank_check": {
+          "name": "dictionary_entries_word_not_blank_check",
+          "value": "btrim(\"dictionary_entries\".\"word\") <> ''"
+        },
+        "dictionary_entries_source_not_blank_check": {
+          "name": "dictionary_entries_source_not_blank_check",
+          "value": "btrim(\"dictionary_entries\".\"source\") <> ''"
+        },
+        "dictionary_entries_furigana_array_check": {
+          "name": "dictionary_entries_furigana_array_check",
+          "value": "jsonb_typeof(\"dictionary_entries\".\"furigana\") = 'array'"
+        },
+        "dictionary_entries_meanings_array_check": {
+          "name": "dictionary_entries_meanings_array_check",
+          "value": "jsonb_typeof(\"dictionary_entries\".\"meanings\") = 'array'"
+        },
+        "dictionary_entries_pitch_accent_object_check": {
+          "name": "dictionary_entries_pitch_accent_object_check",
+          "value": "\"dictionary_entries\".\"pitch_accent\" IS NULL OR jsonb_typeof(\"dictionary_entries\".\"pitch_accent\") = 'object'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.grammar_patterns": {
+      "name": "grammar_patterns",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "pattern": {
+          "name": "pattern",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pattern_plain": {
+          "name": "pattern_plain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meaning": {
+          "name": "meaning",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "formation": {
+          "name": "formation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formation_diagram": {
+          "name": "formation_diagram",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "examples": {
+          "name": "examples",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "common_mistakes": {
+          "name": "common_mistakes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_pattern_ids": {
+          "name": "related_pattern_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "audio_url": {
+          "name": "audio_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "grammar_patterns_pattern_source_uidx": {
+          "name": "grammar_patterns_pattern_source_uidx",
+          "columns": [
+            {
+              "expression": "pattern",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "grammar_patterns_level_idx": {
+          "name": "grammar_patterns_level_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "grammar_patterns_pattern_trgm_idx": {
+          "name": "grammar_patterns_pattern_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"pattern\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "grammar_patterns_plain_trgm_idx": {
+          "name": "grammar_patterns_plain_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"pattern_plain\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "grammar_patterns_meaning_gin_idx": {
+          "name": "grammar_patterns_meaning_gin_idx",
+          "columns": [
+            {
+              "expression": "meaning",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "grammar_patterns_examples_gin_idx": {
+          "name": "grammar_patterns_examples_gin_idx",
+          "columns": [
+            {
+              "expression": "examples",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "grammar_patterns_tags_gin_idx": {
+          "name": "grammar_patterns_tags_gin_idx",
+          "columns": [
+            {
+              "expression": "tags",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "grammar_patterns_fts_idx": {
+          "name": "grammar_patterns_fts_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('simple', coalesce(\"pattern\", '') || ' ' || coalesce(\"pattern_plain\", '')), 'A') ||\n        setweight(to_tsvector('english', coalesce(\"meaning\"::text, '')), 'B')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "grammar_patterns_pattern_not_blank_check": {
+          "name": "grammar_patterns_pattern_not_blank_check",
+          "value": "btrim(\"grammar_patterns\".\"pattern\") <> ''"
+        },
+        "grammar_patterns_source_not_blank_check": {
+          "name": "grammar_patterns_source_not_blank_check",
+          "value": "btrim(\"grammar_patterns\".\"source\") <> ''"
+        },
+        "grammar_patterns_meaning_array_check": {
+          "name": "grammar_patterns_meaning_array_check",
+          "value": "jsonb_typeof(\"grammar_patterns\".\"meaning\") = 'array'"
+        },
+        "grammar_patterns_examples_array_check": {
+          "name": "grammar_patterns_examples_array_check",
+          "value": "jsonb_typeof(\"grammar_patterns\".\"examples\") = 'array'"
+        },
+        "grammar_patterns_formation_diagram_object_check": {
+          "name": "grammar_patterns_formation_diagram_object_check",
+          "value": "\"grammar_patterns\".\"formation_diagram\" IS NULL OR jsonb_typeof(\"grammar_patterns\".\"formation_diagram\") = 'object'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.kanji_entries": {
+      "name": "kanji_entries",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "character": {
+          "name": "character",
+          "type": "char(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unicode": {
+          "name": "unicode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "onyomi": {
+          "name": "onyomi",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "kunyomi": {
+          "name": "kunyomi",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "meanings": {
+          "name": "meanings",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "grade": {
+          "name": "grade",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frequency_rank": {
+          "name": "frequency_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stroke_count": {
+          "name": "stroke_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "radicals": {
+          "name": "radicals",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "components": {
+          "name": "components",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "svg_animation_url": {
+          "name": "svg_animation_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stroke_order_url": {
+          "name": "stroke_order_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "example_word_ids": {
+          "name": "example_word_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "similar_kanji": {
+          "name": "similar_kanji",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "lookalikes": {
+          "name": "lookalikes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "mnemonics": {
+          "name": "mnemonics",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'kanjidic2'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "kanji_entries_character_uidx": {
+          "name": "kanji_entries_character_uidx",
+          "columns": [
+            {
+              "expression": "character",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kanji_entries_unicode_uidx": {
+          "name": "kanji_entries_unicode_uidx",
+          "columns": [
+            {
+              "expression": "unicode",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"kanji_entries\".\"unicode\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kanji_entries_jlpt_frequency_idx": {
+          "name": "kanji_entries_jlpt_frequency_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "frequency_rank",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kanji_entries_grade_idx": {
+          "name": "kanji_entries_grade_idx",
+          "columns": [
+            {
+              "expression": "grade",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kanji_entries_stroke_count_idx": {
+          "name": "kanji_entries_stroke_count_idx",
+          "columns": [
+            {
+              "expression": "stroke_count",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kanji_entries_meanings_gin_idx": {
+          "name": "kanji_entries_meanings_gin_idx",
+          "columns": [
+            {
+              "expression": "meanings",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "kanji_entries_onyomi_gin_idx": {
+          "name": "kanji_entries_onyomi_gin_idx",
+          "columns": [
+            {
+              "expression": "onyomi",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "kanji_entries_kunyomi_gin_idx": {
+          "name": "kanji_entries_kunyomi_gin_idx",
+          "columns": [
+            {
+              "expression": "kunyomi",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "kanji_entries_radicals_gin_idx": {
+          "name": "kanji_entries_radicals_gin_idx",
+          "columns": [
+            {
+              "expression": "radicals",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "kanji_entries_components_gin_idx": {
+          "name": "kanji_entries_components_gin_idx",
+          "columns": [
+            {
+              "expression": "components",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "kanji_entries_meaning_fts_idx": {
+          "name": "kanji_entries_meaning_fts_idx",
+          "columns": [
+            {
+              "expression": "to_tsvector('english', coalesce(\"meanings\"::text, ''))",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "kanji_entries_grade_check": {
+          "name": "kanji_entries_grade_check",
+          "value": "\"kanji_entries\".\"grade\" IS NULL OR \"kanji_entries\".\"grade\" BETWEEN 1 AND 9"
+        },
+        "kanji_entries_frequency_rank_check": {
+          "name": "kanji_entries_frequency_rank_check",
+          "value": "\"kanji_entries\".\"frequency_rank\" IS NULL OR \"kanji_entries\".\"frequency_rank\" > 0"
+        },
+        "kanji_entries_stroke_count_check": {
+          "name": "kanji_entries_stroke_count_check",
+          "value": "\"kanji_entries\".\"stroke_count\" IS NULL OR \"kanji_entries\".\"stroke_count\" > 0"
+        },
+        "kanji_entries_character_check": {
+          "name": "kanji_entries_character_check",
+          "value": "char_length(btrim(\"kanji_entries\".\"character\")) = 1"
+        },
+        "kanji_entries_meanings_array_check": {
+          "name": "kanji_entries_meanings_array_check",
+          "value": "jsonb_typeof(\"kanji_entries\".\"meanings\") = 'array'"
+        },
+        "kanji_entries_mnemonics_array_check": {
+          "name": "kanji_entries_mnemonics_array_check",
+          "value": "jsonb_typeof(\"kanji_entries\".\"mnemonics\") = 'array'"
+        },
+        "kanji_entries_source_not_blank_check": {
+          "name": "kanji_entries_source_not_blank_check",
+          "value": "btrim(\"kanji_entries\".\"source\") <> ''"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.media_assets": {
+      "name": "media_assets",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "filename": {
+          "name": "filename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_type": {
+          "name": "file_type",
+          "type": "media_file_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storage_path": {
+          "name": "storage_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "size_bytes": {
+          "name": "size_bytes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "duration_ms": {
+          "name": "duration_ms",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_item_type": {
+          "name": "related_item_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "related_item_id": {
+          "name": "related_item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "language": {
+          "name": "language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ja'"
+        },
+        "voice_id": {
+          "name": "voice_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "media_assets_storage_path_uidx": {
+          "name": "media_assets_storage_path_uidx",
+          "columns": [
+            {
+              "expression": "storage_path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "media_assets_related_item_idx": {
+          "name": "media_assets_related_item_idx",
+          "columns": [
+            {
+              "expression": "related_item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "related_item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "media_assets_type_created_idx": {
+          "name": "media_assets_type_created_idx",
+          "columns": [
+            {
+              "expression": "file_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "media_assets_voice_idx": {
+          "name": "media_assets_voice_idx",
+          "columns": [
+            {
+              "expression": "voice_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "media_assets_filename_not_blank_check": {
+          "name": "media_assets_filename_not_blank_check",
+          "value": "btrim(\"media_assets\".\"filename\") <> ''"
+        },
+        "media_assets_mime_type_not_blank_check": {
+          "name": "media_assets_mime_type_not_blank_check",
+          "value": "btrim(\"media_assets\".\"mime_type\") <> ''"
+        },
+        "media_assets_url_not_blank_check": {
+          "name": "media_assets_url_not_blank_check",
+          "value": "btrim(\"media_assets\".\"url\") <> ''"
+        },
+        "media_assets_storage_path_not_blank_check": {
+          "name": "media_assets_storage_path_not_blank_check",
+          "value": "btrim(\"media_assets\".\"storage_path\") <> ''"
+        },
+        "media_assets_size_bytes_check": {
+          "name": "media_assets_size_bytes_check",
+          "value": "\"media_assets\".\"size_bytes\" >= 0"
+        },
+        "media_assets_duration_check": {
+          "name": "media_assets_duration_check",
+          "value": "\"media_assets\".\"duration_ms\" IS NULL OR \"media_assets\".\"duration_ms\" >= 0"
+        },
+        "media_assets_related_pair_check": {
+          "name": "media_assets_related_pair_check",
+          "value": "(\"media_assets\".\"related_item_type\" IS NULL) = (\"media_assets\".\"related_item_id\" IS NULL)"
+        },
+        "media_assets_language_not_blank_check": {
+          "name": "media_assets_language_not_blank_check",
+          "value": "btrim(\"media_assets\".\"language\") <> ''"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.dictionary_entry_links": {
+      "name": "dictionary_entry_links",
+      "schema": "",
+      "columns": {
+        "source_entry_id": {
+          "name": "source_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_entry_id": {
+          "name": "target_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relation_type": {
+          "name": "relation_type",
+          "type": "dictionary_relation_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "dictionary_entry_links_target_idx": {
+          "name": "dictionary_entry_links_target_idx",
+          "columns": [
+            {
+              "expression": "target_entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "dictionary_entry_links_source_entry_id_dictionary_entries_id_fk": {
+          "name": "dictionary_entry_links_source_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "dictionary_entry_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "source_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "dictionary_entry_links_target_entry_id_dictionary_entries_id_fk": {
+          "name": "dictionary_entry_links_target_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "dictionary_entry_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "target_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "dictionary_entry_links_pk": {
+          "name": "dictionary_entry_links_pk",
+          "columns": [
+            "source_entry_id",
+            "target_entry_id",
+            "relation_type"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "dictionary_entry_links_no_self_check": {
+          "name": "dictionary_entry_links_no_self_check",
+          "value": "\"dictionary_entry_links\".\"source_entry_id\" <> \"dictionary_entry_links\".\"target_entry_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.dictionary_grammar_links": {
+      "name": "dictionary_grammar_links",
+      "schema": "",
+      "columns": {
+        "dictionary_entry_id": {
+          "name": "dictionary_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "grammar_pattern_id": {
+          "name": "grammar_pattern_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "dictionary_grammar_pattern_idx": {
+          "name": "dictionary_grammar_pattern_idx",
+          "columns": [
+            {
+              "expression": "grammar_pattern_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "dictionary_grammar_links_dictionary_entry_id_dictionary_entries_id_fk": {
+          "name": "dictionary_grammar_links_dictionary_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "dictionary_grammar_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "dictionary_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "dictionary_grammar_links_grammar_pattern_id_grammar_patterns_id_fk": {
+          "name": "dictionary_grammar_links_grammar_pattern_id_grammar_patterns_id_fk",
+          "tableFrom": "dictionary_grammar_links",
+          "tableTo": "grammar_patterns",
+          "columnsFrom": [
+            "grammar_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "dictionary_grammar_links_pk": {
+          "name": "dictionary_grammar_links_pk",
+          "columns": [
+            "dictionary_entry_id",
+            "grammar_pattern_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dictionary_kanji_links": {
+      "name": "dictionary_kanji_links",
+      "schema": "",
+      "columns": {
+        "dictionary_entry_id": {
+          "name": "dictionary_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kanji_entry_id": {
+          "name": "kanji_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "example_rank": {
+          "name": "example_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "dictionary_kanji_kanji_idx": {
+          "name": "dictionary_kanji_kanji_idx",
+          "columns": [
+            {
+              "expression": "kanji_entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dictionary_kanji_examples_idx": {
+          "name": "dictionary_kanji_examples_idx",
+          "columns": [
+            {
+              "expression": "kanji_entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "example_rank",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"dictionary_kanji_links\".\"example_rank\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "dictionary_kanji_links_dictionary_entry_id_dictionary_entries_id_fk": {
+          "name": "dictionary_kanji_links_dictionary_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "dictionary_kanji_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "dictionary_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "dictionary_kanji_links_kanji_entry_id_kanji_entries_id_fk": {
+          "name": "dictionary_kanji_links_kanji_entry_id_kanji_entries_id_fk",
+          "tableFrom": "dictionary_kanji_links",
+          "tableTo": "kanji_entries",
+          "columnsFrom": [
+            "kanji_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "dictionary_kanji_links_pk": {
+          "name": "dictionary_kanji_links_pk",
+          "columns": [
+            "dictionary_entry_id",
+            "kanji_entry_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "dictionary_kanji_example_rank_check": {
+          "name": "dictionary_kanji_example_rank_check",
+          "value": "\"dictionary_kanji_links\".\"example_rank\" IS NULL OR \"dictionary_kanji_links\".\"example_rank\" BETWEEN 1 AND 5"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.grammar_pattern_links": {
+      "name": "grammar_pattern_links",
+      "schema": "",
+      "columns": {
+        "source_pattern_id": {
+          "name": "source_pattern_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_pattern_id": {
+          "name": "target_pattern_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "grammar_pattern_links_target_idx": {
+          "name": "grammar_pattern_links_target_idx",
+          "columns": [
+            {
+              "expression": "target_pattern_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "grammar_pattern_links_source_pattern_id_grammar_patterns_id_fk": {
+          "name": "grammar_pattern_links_source_pattern_id_grammar_patterns_id_fk",
+          "tableFrom": "grammar_pattern_links",
+          "tableTo": "grammar_patterns",
+          "columnsFrom": [
+            "source_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "grammar_pattern_links_target_pattern_id_grammar_patterns_id_fk": {
+          "name": "grammar_pattern_links_target_pattern_id_grammar_patterns_id_fk",
+          "tableFrom": "grammar_pattern_links",
+          "tableTo": "grammar_patterns",
+          "columnsFrom": [
+            "target_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "grammar_pattern_links_pk": {
+          "name": "grammar_pattern_links_pk",
+          "columns": [
+            "source_pattern_id",
+            "target_pattern_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "grammar_pattern_links_no_self_check": {
+          "name": "grammar_pattern_links_no_self_check",
+          "value": "\"grammar_pattern_links\".\"source_pattern_id\" <> \"grammar_pattern_links\".\"target_pattern_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.kanji_entry_links": {
+      "name": "kanji_entry_links",
+      "schema": "",
+      "columns": {
+        "source_kanji_id": {
+          "name": "source_kanji_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_kanji_id": {
+          "name": "target_kanji_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relation_type": {
+          "name": "relation_type",
+          "type": "kanji_relation_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "kanji_entry_links_target_idx": {
+          "name": "kanji_entry_links_target_idx",
+          "columns": [
+            {
+              "expression": "target_kanji_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "kanji_entry_links_source_kanji_id_kanji_entries_id_fk": {
+          "name": "kanji_entry_links_source_kanji_id_kanji_entries_id_fk",
+          "tableFrom": "kanji_entry_links",
+          "tableTo": "kanji_entries",
+          "columnsFrom": [
+            "source_kanji_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "kanji_entry_links_target_kanji_id_kanji_entries_id_fk": {
+          "name": "kanji_entry_links_target_kanji_id_kanji_entries_id_fk",
+          "tableFrom": "kanji_entry_links",
+          "tableTo": "kanji_entries",
+          "columnsFrom": [
+            "target_kanji_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "kanji_entry_links_pk": {
+          "name": "kanji_entry_links_pk",
+          "columns": [
+            "source_kanji_id",
+            "target_kanji_id",
+            "relation_type"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "kanji_entry_links_no_self_check": {
+          "name": "kanji_entry_links_no_self_check",
+          "value": "\"kanji_entry_links\".\"source_kanji_id\" <> \"kanji_entry_links\".\"target_kanji_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.question_grammar_links": {
+      "name": "question_grammar_links",
+      "schema": "",
+      "columns": {
+        "question_id": {
+          "name": "question_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "grammar_pattern_id": {
+          "name": "grammar_pattern_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "question_grammar_pattern_idx": {
+          "name": "question_grammar_pattern_idx",
+          "columns": [
+            {
+              "expression": "grammar_pattern_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "question_grammar_links_question_id_questions_id_fk": {
+          "name": "question_grammar_links_question_id_questions_id_fk",
+          "tableFrom": "question_grammar_links",
+          "tableTo": "questions",
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "question_grammar_links_grammar_pattern_id_grammar_patterns_id_fk": {
+          "name": "question_grammar_links_grammar_pattern_id_grammar_patterns_id_fk",
+          "tableFrom": "question_grammar_links",
+          "tableTo": "grammar_patterns",
+          "columnsFrom": [
+            "grammar_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "question_grammar_links_pk": {
+          "name": "question_grammar_links_pk",
+          "columns": [
+            "question_id",
+            "grammar_pattern_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.question_vocabulary_links": {
+      "name": "question_vocabulary_links",
+      "schema": "",
+      "columns": {
+        "question_id": {
+          "name": "question_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dictionary_entry_id": {
+          "name": "dictionary_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "question_vocabulary_dictionary_idx": {
+          "name": "question_vocabulary_dictionary_idx",
+          "columns": [
+            {
+              "expression": "dictionary_entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "question_vocabulary_links_question_id_questions_id_fk": {
+          "name": "question_vocabulary_links_question_id_questions_id_fk",
+          "tableFrom": "question_vocabulary_links",
+          "tableTo": "questions",
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "question_vocabulary_links_dictionary_entry_id_dictionary_entries_id_fk": {
+          "name": "question_vocabulary_links_dictionary_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "question_vocabulary_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "dictionary_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "question_vocabulary_links_pk": {
+          "name": "question_vocabulary_links_pk",
+          "columns": [
+            "question_id",
+            "dictionary_entry_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sentence_grammar_links": {
+      "name": "sentence_grammar_links",
+      "schema": "",
+      "columns": {
+        "sentence_id": {
+          "name": "sentence_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "grammar_pattern_id": {
+          "name": "grammar_pattern_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "sentence_grammar_pattern_idx": {
+          "name": "sentence_grammar_pattern_idx",
+          "columns": [
+            {
+              "expression": "grammar_pattern_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "sentence_grammar_links_sentence_id_sentences_id_fk": {
+          "name": "sentence_grammar_links_sentence_id_sentences_id_fk",
+          "tableFrom": "sentence_grammar_links",
+          "tableTo": "sentences",
+          "columnsFrom": [
+            "sentence_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "sentence_grammar_links_grammar_pattern_id_grammar_patterns_id_fk": {
+          "name": "sentence_grammar_links_grammar_pattern_id_grammar_patterns_id_fk",
+          "tableFrom": "sentence_grammar_links",
+          "tableTo": "grammar_patterns",
+          "columnsFrom": [
+            "grammar_pattern_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "sentence_grammar_links_pk": {
+          "name": "sentence_grammar_links_pk",
+          "columns": [
+            "sentence_id",
+            "grammar_pattern_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sentence_vocabulary_links": {
+      "name": "sentence_vocabulary_links",
+      "schema": "",
+      "columns": {
+        "sentence_id": {
+          "name": "sentence_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dictionary_entry_id": {
+          "name": "dictionary_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "sentence_vocabulary_dictionary_idx": {
+          "name": "sentence_vocabulary_dictionary_idx",
+          "columns": [
+            {
+              "expression": "dictionary_entry_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "sentence_vocabulary_links_sentence_id_sentences_id_fk": {
+          "name": "sentence_vocabulary_links_sentence_id_sentences_id_fk",
+          "tableFrom": "sentence_vocabulary_links",
+          "tableTo": "sentences",
+          "columnsFrom": [
+            "sentence_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "sentence_vocabulary_links_dictionary_entry_id_dictionary_entries_id_fk": {
+          "name": "sentence_vocabulary_links_dictionary_entry_id_dictionary_entries_id_fk",
+          "tableFrom": "sentence_vocabulary_links",
+          "tableTo": "dictionary_entries",
+          "columnsFrom": [
+            "dictionary_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "sentence_vocabulary_links_pk": {
+          "name": "sentence_vocabulary_links_pk",
+          "columns": [
+            "sentence_id",
+            "dictionary_entry_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sentences": {
+      "name": "sentences",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "japanese": {
+          "name": "japanese",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "furigana_html": {
+          "name": "furigana_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "translations": {
+          "name": "translations",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "audio_url": {
+          "name": "audio_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "grammar_ids": {
+          "name": "grammar_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "vocabulary_ids": {
+          "name": "vocabulary_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "sentences_source_source_id_uidx": {
+          "name": "sentences_source_source_id_uidx",
+          "columns": [
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"sentences\".\"source_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sentences_japanese_hash_idx": {
+          "name": "sentences_japanese_hash_idx",
+          "columns": [
+            {
+              "expression": "japanese",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "hash",
+          "with": {}
+        },
+        "sentences_level_idx": {
+          "name": "sentences_level_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sentences_japanese_trgm_idx": {
+          "name": "sentences_japanese_trgm_idx",
+          "columns": [
+            {
+              "expression": "\"japanese\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "sentences_translations_gin_idx": {
+          "name": "sentences_translations_gin_idx",
+          "columns": [
+            {
+              "expression": "translations",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "sentences_grammar_ids_gin_idx": {
+          "name": "sentences_grammar_ids_gin_idx",
+          "columns": [
+            {
+              "expression": "grammar_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "sentences_vocabulary_ids_gin_idx": {
+          "name": "sentences_vocabulary_ids_gin_idx",
+          "columns": [
+            {
+              "expression": "vocabulary_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "sentences_tags_gin_idx": {
+          "name": "sentences_tags_gin_idx",
+          "columns": [
+            {
+              "expression": "tags",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "sentences_fts_idx": {
+          "name": "sentences_fts_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('simple', coalesce(\"japanese\", '')), 'A') ||\n        setweight(to_tsvector('english', coalesce(\"translations\"::text, '')), 'B')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "sentences_japanese_not_blank_check": {
+          "name": "sentences_japanese_not_blank_check",
+          "value": "btrim(\"sentences\".\"japanese\") <> ''"
+        },
+        "sentences_source_not_blank_check": {
+          "name": "sentences_source_not_blank_check",
+          "value": "btrim(\"sentences\".\"source\") <> ''"
+        },
+        "sentences_translations_array_check": {
+          "name": "sentences_translations_array_check",
+          "value": "jsonb_typeof(\"sentences\".\"translations\") = 'array'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.srs_cards": {
+      "name": "srs_cards",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_type": {
+          "name": "item_type",
+          "type": "content_item_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ease_factor": {
+          "name": "ease_factor",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 2.5
+        },
+        "interval_days": {
+          "name": "interval_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "repetitions": {
+          "name": "repetitions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "next_review_at": {
+          "name": "next_review_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "last_reviewed_at": {
+          "name": "last_reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_reviews": {
+          "name": "total_reviews",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "correct_count": {
+          "name": "correct_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "mistake_count": {
+          "name": "mistake_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "average_time_ms": {
+          "name": "average_time_ms",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "confidence": {
+          "name": "confidence",
+          "type": "srs_confidence",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deck_id": {
+          "name": "deck_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "srs_cards_user_item_uidx": {
+          "name": "srs_cards_user_item_uidx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "srs_cards_due_idx": {
+          "name": "srs_cards_due_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "next_review_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ease_factor",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "srs_cards_deck_due_idx": {
+          "name": "srs_cards_deck_due_idx",
+          "columns": [
+            {
+              "expression": "deck_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "next_review_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "srs_cards_item_idx": {
+          "name": "srs_cards_item_idx",
+          "columns": [
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "srs_cards_last_reviewed_idx": {
+          "name": "srs_cards_last_reviewed_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "last_reviewed_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "srs_cards_user_id_users_id_fk": {
+          "name": "srs_cards_user_id_users_id_fk",
+          "tableFrom": "srs_cards",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "srs_cards_deck_owner_fk": {
+          "name": "srs_cards_deck_owner_fk",
+          "tableFrom": "srs_cards",
+          "tableTo": "srs_decks",
+          "columnsFrom": [
+            "deck_id",
+            "user_id"
+          ],
+          "columnsTo": [
+            "id",
+            "user_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "srs_cards_ease_factor_check": {
+          "name": "srs_cards_ease_factor_check",
+          "value": "\"srs_cards\".\"ease_factor\" BETWEEN 1.3 AND 2.5"
+        },
+        "srs_cards_interval_days_check": {
+          "name": "srs_cards_interval_days_check",
+          "value": "\"srs_cards\".\"interval_days\" >= 1"
+        },
+        "srs_cards_repetitions_check": {
+          "name": "srs_cards_repetitions_check",
+          "value": "\"srs_cards\".\"repetitions\" >= 0"
+        },
+        "srs_cards_total_reviews_check": {
+          "name": "srs_cards_total_reviews_check",
+          "value": "\"srs_cards\".\"total_reviews\" >= 0"
+        },
+        "srs_cards_correct_count_check": {
+          "name": "srs_cards_correct_count_check",
+          "value": "\"srs_cards\".\"correct_count\" >= 0"
+        },
+        "srs_cards_mistake_count_check": {
+          "name": "srs_cards_mistake_count_check",
+          "value": "\"srs_cards\".\"mistake_count\" >= 0"
+        },
+        "srs_cards_average_time_check": {
+          "name": "srs_cards_average_time_check",
+          "value": "\"srs_cards\".\"average_time_ms\" >= 0"
+        },
+        "srs_cards_review_counts_check": {
+          "name": "srs_cards_review_counts_check",
+          "value": "\"srs_cards\".\"correct_count\" + \"srs_cards\".\"mistake_count\" <= \"srs_cards\".\"total_reviews\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.srs_decks": {
+      "name": "srs_decks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "card_count": {
+          "name": "card_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "srs_decks_user_name_uidx": {
+          "name": "srs_decks_user_name_uidx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "srs_decks_public_level_idx": {
+          "name": "srs_decks_public_level_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"srs_decks\".\"is_public\" = true",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "srs_decks_user_id_users_id_fk": {
+          "name": "srs_decks_user_id_users_id_fk",
+          "tableFrom": "srs_decks",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "srs_decks_id_user_unique": {
+          "name": "srs_decks_id_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "srs_decks_name_not_blank_check": {
+          "name": "srs_decks_name_not_blank_check",
+          "value": "btrim(\"srs_decks\".\"name\") <> ''"
+        },
+        "srs_decks_card_count_check": {
+          "name": "srs_decks_card_count_check",
+          "value": "\"srs_decks\".\"card_count\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.practice_tests": {
+      "name": "practice_tests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "jlpt_test_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_type": {
+          "name": "test_type",
+          "type": "test_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sections": {
+          "name": "sections",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "total_time_minutes": {
+          "name": "total_time_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty_score": {
+          "name": "difficulty_score",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "is_published": {
+          "name": "is_published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "practice_tests_level_type_published_idx": {
+          "name": "practice_tests_level_type_published_idx",
+          "columns": [
+            {
+              "expression": "level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "test_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "is_published",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "practice_tests_created_by_idx": {
+          "name": "practice_tests_created_by_idx",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "practice_tests_tags_gin_idx": {
+          "name": "practice_tests_tags_gin_idx",
+          "columns": [
+            {
+              "expression": "tags",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "practice_tests_sections_gin_idx": {
+          "name": "practice_tests_sections_gin_idx",
+          "columns": [
+            {
+              "expression": "sections",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "practice_tests_created_by_users_id_fk": {
+          "name": "practice_tests_created_by_users_id_fk",
+          "tableFrom": "practice_tests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "practice_tests_title_not_blank_check": {
+          "name": "practice_tests_title_not_blank_check",
+          "value": "btrim(\"practice_tests\".\"title\") <> ''"
+        },
+        "practice_tests_sections_array_check": {
+          "name": "practice_tests_sections_array_check",
+          "value": "jsonb_typeof(\"practice_tests\".\"sections\") = 'array'"
+        },
+        "practice_tests_total_time_check": {
+          "name": "practice_tests_total_time_check",
+          "value": "\"practice_tests\".\"total_time_minutes\" > 0"
+        },
+        "practice_tests_difficulty_score_check": {
+          "name": "practice_tests_difficulty_score_check",
+          "value": "\"practice_tests\".\"difficulty_score\" BETWEEN 0 AND 5"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.questions": {
+      "name": "questions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "test_id": {
+          "name": "test_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "section_type": {
+          "name": "section_type",
+          "type": "question_section_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question_jp": {
+          "name": "question_jp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "question_en": {
+          "name": "question_en",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stimulus": {
+          "name": "stimulus",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "options": {
+          "name": "options",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "correct_answer": {
+          "name": "correct_answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "explanation_jp": {
+          "name": "explanation_jp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "explanation_en": {
+          "name": "explanation_en",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vocabulary_ids": {
+          "name": "vocabulary_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "grammar_ids": {
+          "name": "grammar_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::uuid[]"
+        },
+        "audio_url": {
+          "name": "audio_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 3
+        },
+        "jlpt_level": {
+          "name": "jlpt_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "time_limit_seconds": {
+          "name": "time_limit_seconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "questions_test_section_idx": {
+          "name": "questions_test_section_idx",
+          "columns": [
+            {
+              "expression": "test_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "section_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "questions_level_section_difficulty_idx": {
+          "name": "questions_level_section_difficulty_idx",
+          "columns": [
+            {
+              "expression": "jlpt_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "section_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "difficulty",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "questions_active_source_idx": {
+          "name": "questions_active_source_idx",
+          "columns": [
+            {
+              "expression": "is_active",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "questions_options_gin_idx": {
+          "name": "questions_options_gin_idx",
+          "columns": [
+            {
+              "expression": "options",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "questions_stimulus_gin_idx": {
+          "name": "questions_stimulus_gin_idx",
+          "columns": [
+            {
+              "expression": "stimulus",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "questions_vocabulary_ids_gin_idx": {
+          "name": "questions_vocabulary_ids_gin_idx",
+          "columns": [
+            {
+              "expression": "vocabulary_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "questions_grammar_ids_gin_idx": {
+          "name": "questions_grammar_ids_gin_idx",
+          "columns": [
+            {
+              "expression": "grammar_ids",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "questions_tags_gin_idx": {
+          "name": "questions_tags_gin_idx",
+          "columns": [
+            {
+              "expression": "tags",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "questions_fts_idx": {
+          "name": "questions_fts_idx",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('simple', coalesce(\"question_jp\", '')), 'A') ||\n        setweight(to_tsvector('english', coalesce(\"question_en\", '') || ' ' || coalesce(\"explanation_en\", '')), 'B')\n      )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "questions_test_id_practice_tests_id_fk": {
+          "name": "questions_test_id_practice_tests_id_fk",
+          "tableFrom": "questions",
+          "tableTo": "practice_tests",
+          "columnsFrom": [
+            "test_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "questions_text_present_check": {
+          "name": "questions_text_present_check",
+          "value": "coalesce(btrim(\"questions\".\"question_jp\"), '') <> '' OR coalesce(btrim(\"questions\".\"question_en\"), '') <> ''"
+        },
+        "questions_options_array_check": {
+          "name": "questions_options_array_check",
+          "value": "jsonb_typeof(\"questions\".\"options\") = 'array'"
+        },
+        "questions_options_count_check": {
+          "name": "questions_options_count_check",
+          "value": "jsonb_array_length(\"questions\".\"options\") BETWEEN 2 AND 8"
+        },
+        "questions_correct_answer_exists_check": {
+          "name": "questions_correct_answer_exists_check",
+          "value": "\"questions\".\"options\" @> jsonb_build_array(jsonb_build_object('id', \"questions\".\"correct_answer\"))"
+        },
+        "questions_stimulus_object_check": {
+          "name": "questions_stimulus_object_check",
+          "value": "\"questions\".\"stimulus\" IS NULL OR jsonb_typeof(\"questions\".\"stimulus\") = 'object'"
+        },
+        "questions_difficulty_check": {
+          "name": "questions_difficulty_check",
+          "value": "\"questions\".\"difficulty\" BETWEEN 1 AND 5"
+        },
+        "questions_time_limit_check": {
+          "name": "questions_time_limit_check",
+          "value": "\"questions\".\"time_limit_seconds\" IS NULL OR \"questions\".\"time_limit_seconds\" > 0"
+        },
+        "questions_source_check": {
+          "name": "questions_source_check",
+          "value": "\"questions\".\"source\" IN ('original', 'generated')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.test_sessions": {
+      "name": "test_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_id": {
+          "name": "test_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_spent_seconds": {
+          "name": "time_spent_seconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "answers": {
+          "name": "answers",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "score_total": {
+          "name": "score_total",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_by_section": {
+          "name": "score_by_section",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "passed": {
+          "name": "passed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "review_mode": {
+          "name": "review_mode",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "test_sessions_user_started_idx": {
+          "name": "test_sessions_user_started_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "test_sessions_test_completed_idx": {
+          "name": "test_sessions_test_completed_idx",
+          "columns": [
+            {
+              "expression": "test_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "completed_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "test_sessions_incomplete_idx": {
+          "name": "test_sessions_incomplete_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"test_sessions\".\"completed_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "test_sessions_answers_gin_idx": {
+          "name": "test_sessions_answers_gin_idx",
+          "columns": [
+            {
+              "expression": "answers",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "test_sessions_user_id_users_id_fk": {
+          "name": "test_sessions_user_id_users_id_fk",
+          "tableFrom": "test_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "test_sessions_test_id_practice_tests_id_fk": {
+          "name": "test_sessions_test_id_practice_tests_id_fk",
+          "tableFrom": "test_sessions",
+          "tableTo": "practice_tests",
+          "columnsFrom": [
+            "test_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "test_sessions_time_spent_check": {
+          "name": "test_sessions_time_spent_check",
+          "value": "\"test_sessions\".\"time_spent_seconds\" >= 0"
+        },
+        "test_sessions_completed_after_start_check": {
+          "name": "test_sessions_completed_after_start_check",
+          "value": "\"test_sessions\".\"completed_at\" IS NULL OR \"test_sessions\".\"completed_at\" >= \"test_sessions\".\"started_at\""
+        },
+        "test_sessions_answers_array_check": {
+          "name": "test_sessions_answers_array_check",
+          "value": "jsonb_typeof(\"test_sessions\".\"answers\") = 'array'"
+        },
+        "test_sessions_score_total_check": {
+          "name": "test_sessions_score_total_check",
+          "value": "\"test_sessions\".\"score_total\" IS NULL OR \"test_sessions\".\"score_total\" BETWEEN 0 AND 180"
+        },
+        "test_sessions_score_by_section_object_check": {
+          "name": "test_sessions_score_by_section_object_check",
+          "value": "\"test_sessions\".\"score_by_section\" IS NULL OR jsonb_typeof(\"test_sessions\".\"score_by_section\") = 'object'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.user_bookmarks": {
+      "name": "user_bookmarks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_type": {
+          "name": "item_type",
+          "type": "content_item_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "collection_name": {
+          "name": "collection_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Default'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_bookmarks_user_item_collection_uidx": {
+          "name": "user_bookmarks_user_item_collection_uidx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "collection_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_bookmarks_user_collection_idx": {
+          "name": "user_bookmarks_user_collection_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "collection_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_bookmarks_item_idx": {
+          "name": "user_bookmarks_item_idx",
+          "columns": [
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_bookmarks_user_id_users_id_fk": {
+          "name": "user_bookmarks_user_id_users_id_fk",
+          "tableFrom": "user_bookmarks",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "user_bookmarks_collection_not_blank_check": {
+          "name": "user_bookmarks_collection_not_blank_check",
+          "value": "btrim(\"user_bookmarks\".\"collection_name\") <> ''"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.user_progress": {
+      "name": "user_progress",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_type": {
+          "name": "item_type",
+          "type": "content_item_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "progress_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'not_started'"
+        },
+        "accuracy": {
+          "name": "accuracy",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "study_count": {
+          "name": "study_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_studied_at": {
+          "name": "last_studied_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "user_progress_user_item_uidx": {
+          "name": "user_progress_user_item_uidx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_progress_user_status_idx": {
+          "name": "user_progress_user_status_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_progress_item_idx": {
+          "name": "user_progress_item_idx",
+          "columns": [
+            {
+              "expression": "item_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_progress_last_studied_idx": {
+          "name": "user_progress_last_studied_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "last_studied_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_progress_user_id_users_id_fk": {
+          "name": "user_progress_user_id_users_id_fk",
+          "tableFrom": "user_progress",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "user_progress_accuracy_check": {
+          "name": "user_progress_accuracy_check",
+          "value": "\"user_progress\".\"accuracy\" BETWEEN 0 AND 1"
+        },
+        "user_progress_study_count_check": {
+          "name": "user_progress_study_count_check",
+          "value": "\"user_progress\".\"study_count\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_level": {
+          "name": "target_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'N5'"
+        },
+        "current_level": {
+          "name": "current_level",
+          "type": "jlpt_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NONE'"
+        },
+        "study_languages": {
+          "name": "study_languages",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY['en']::text[]"
+        },
+        "streak_days": {
+          "name": "streak_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_study_date": {
+          "name": "last_study_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "xp_total": {
+          "name": "xp_total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "users_email_lower_uidx": {
+          "name": "users_email_lower_uidx",
+          "columns": [
+            {
+              "expression": "lower(\"email\")",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_username_lower_uidx": {
+          "name": "users_username_lower_uidx",
+          "columns": [
+            {
+              "expression": "lower(\"username\")",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_study_languages_gin_idx": {
+          "name": "users_study_languages_gin_idx",
+          "columns": [
+            {
+              "expression": "study_languages",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "users_target_level_idx": {
+          "name": "users_target_level_idx",
+          "columns": [
+            {
+              "expression": "target_level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "users_email_shape_check": {
+          "name": "users_email_shape_check",
+          "value": "btrim(\"users\".\"email\") <> '' AND position('@' in \"users\".\"email\") > 1"
+        },
+        "users_username_not_blank_check": {
+          "name": "users_username_not_blank_check",
+          "value": "btrim(\"users\".\"username\") <> ''"
+        },
+        "users_streak_days_check": {
+          "name": "users_streak_days_check",
+          "value": "\"users\".\"streak_days\" >= 0"
+        },
+        "users_xp_total_check": {
+          "name": "users_xp_total_check",
+          "value": "\"users\".\"xp_total\" >= 0"
+        },
+        "users_study_languages_check": {
+          "name": "users_study_languages_check",
+          "value": "cardinality(\"users\".\"study_languages\") > 0 AND \"users\".\"study_languages\" <@ ARRAY['en','ta','ml','hi']::text[]"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.content_item_type": {
+      "name": "content_item_type",
+      "schema": "public",
+      "values": [
+        "word",
+        "kanji",
+        "grammar",
+        "sentence"
+      ]
+    },
+    "public.dictionary_relation_type": {
+      "name": "dictionary_relation_type",
+      "schema": "public",
+      "values": [
+        "synonym",
+        "antonym"
+      ]
+    },
+    "public.jlpt_level": {
+      "name": "jlpt_level",
+      "schema": "public",
+      "values": [
+        "N5",
+        "N4",
+        "N3",
+        "N2",
+        "N1",
+        "NONE"
+      ]
+    },
+    "public.jlpt_test_level": {
+      "name": "jlpt_test_level",
+      "schema": "public",
+      "values": [
+        "N5",
+        "N4",
+        "N3",
+        "N2",
+        "N1"
+      ]
+    },
+    "public.kanji_relation_type": {
+      "name": "kanji_relation_type",
+      "schema": "public",
+      "values": [
+        "similar",
+        "lookalike"
+      ]
+    },
+    "public.media_file_type": {
+      "name": "media_file_type",
+      "schema": "public",
+      "values": [
+        "audio",
+        "image",
+        "svg",
+        "pdf",
+        "video"
+      ]
+    },
+    "public.progress_status": {
+      "name": "progress_status",
+      "schema": "public",
+      "values": [
+        "not_started",
+        "learning",
+        "reviewing",
+        "mastered"
+      ]
+    },
+    "public.question_section_type": {
+      "name": "question_section_type",
+      "schema": "public",
+      "values": [
+        "vocabulary",
+        "grammar",
+        "reading",
+        "listening"
+      ]
+    },
+    "public.srs_confidence": {
+      "name": "srs_confidence",
+      "schema": "public",
+      "values": [
+        "again",
+        "hard",
+        "good",
+        "easy"
+      ]
+    },
+    "public.test_type": {
+      "name": "test_type",
+      "schema": "public",
+      "values": [
+        "mock_full",
+        "section_only",
+        "quick_drill",
+        "adaptive"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

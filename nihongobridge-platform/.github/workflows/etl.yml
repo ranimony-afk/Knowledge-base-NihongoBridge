@@ -1,0 +1,102 @@
+name: Weekly ETL
+
+on:
+  schedule:
+    - cron: "0 2 * * 0"
+  workflow_dispatch:
+    inputs:
+      pipelines:
+        description: Comma-separated pipelines (jmdict,tatoeba,tts,questions) or all
+        required: true
+        default: all
+        type: string
+      question_level:
+        description: JLPT level for generated question drafts
+        required: true
+        default: N5
+        type: choice
+        options: [N5, N4, N3, N2, N1]
+      question_count:
+        description: Number of original knowledge-base-grounded questions
+        required: true
+        default: "20"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-etl
+  cancel-in-progress: false
+
+jobs:
+  etl:
+    name: Run production ETL pipelines
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    environment: production-etl
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: Checkout platform
+        uses: actions/checkout@v4
+      - name: Checkout ETL repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/nihongobridge-etl
+          path: components/nihongobridge-etl
+          token: ${{ secrets.PLATFORM_REPOS_TOKEN || github.token }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: components/nihongobridge-etl/requirements.txt
+      - name: Install ETL dependencies
+        working-directory: components/nihongobridge-etl
+        run: python -m pip install -r requirements.txt
+      - name: Run selected pipelines
+        env:
+          COMPONENT_ROOT: ${{ github.workspace }}/components
+          PYTHON_BIN: python
+          ETL_PIPELINES: ${{ inputs.pipelines || 'all' }}
+          ETL_ALLOW_MISSING_ENRICHMENT: ${{ vars.ETL_ALLOW_MISSING_ENRICHMENT || 'false' }}
+          QUESTION_LEVEL: ${{ inputs.question_level || 'N5' }}
+          QUESTION_SECTION: all
+          QUESTION_COUNT: ${{ inputs.question_count || '20' }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JMDICT_SHA256: ${{ vars.JMDICT_SHA256 }}
+          JMDICT_CHECKSUM_URL: ${{ vars.JMDICT_CHECKSUM_URL }}
+          REQUIRE_SOURCE_CHECKSUM: ${{ vars.REQUIRE_SOURCE_CHECKSUM || 'true' }}
+          TATOEBA_SENTENCES_SHA256: ${{ vars.TATOEBA_SENTENCES_SHA256 }}
+          TATOEBA_LINKS_SHA256: ${{ vars.TATOEBA_LINKS_SHA256 }}
+          TATOEBA_TAGS_SHA256: ${{ vars.TATOEBA_TAGS_SHA256 }}
+          TATOEBA_REQUIRE_CHECKSUMS: ${{ vars.TATOEBA_REQUIRE_CHECKSUMS || 'true' }}
+          JLPT_VOCAB_DIR: ${{ vars.JLPT_VOCAB_DIR || './data/enrichment/openjlpt' }}
+          INNOCENT_FREQUENCY_PATH: ${{ vars.INNOCENT_FREQUENCY_PATH || './data/enrichment/innocent_corpus.zip' }}
+          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          MINIO_AUDIO_BUCKET: ${{ vars.MINIO_AUDIO_BUCKET || 'audio' }}
+          MINIO_PUBLIC_URL: ${{ vars.MINIO_PUBLIC_URL }}
+          EDGE_TTS_RATE: ${{ vars.EDGE_TTS_RATE || '+0%' }}
+          EDGE_TTS_VOLUME: ${{ vars.EDGE_TTS_VOLUME || '+0%' }}
+        run: ./scripts/run-etl.sh
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: etl-reports-${{ github.run_id }}
+          path: components/nihongobridge-etl/reports/*.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Notify Slack on failure
+        if: ${{ failure() && env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ env.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "NihongoBridge weekly ETL failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }

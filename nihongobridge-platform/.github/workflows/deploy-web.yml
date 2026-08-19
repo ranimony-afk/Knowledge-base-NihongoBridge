@@ -1,0 +1,107 @@
+name: Deploy web
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 20.x
+  NEXT_TELEMETRY_DISABLED: "1"
+
+concurrency:
+  group: production-web
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Migrate and deploy web to Vercel
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - name: Checkout platform
+        uses: actions/checkout@v4
+      - name: Checkout knowledge schema
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/nihongobridge-knowledge
+          path: components/nihongobridge-knowledge
+          token: ${{ secrets.PLATFORM_REPOS_TOKEN || github.token }}
+      - name: Checkout admin schema
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/nihongobridge-admin
+          path: components/nihongobridge-admin
+          token: ${{ secrets.PLATFORM_REPOS_TOKEN || github.token }}
+      - name: Checkout AI schema
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/nihongobridge-ai
+          path: components/nihongobridge-ai
+          token: ${{ secrets.PLATFORM_REPOS_TOKEN || github.token }}
+      - name: Checkout web app
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/nihongobridge-web
+          path: components/nihongobridge-web
+          token: ${{ secrets.PLATFORM_REPOS_TOKEN || github.token }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: |
+            components/nihongobridge-knowledge/package-lock.json
+            components/nihongobridge-admin/package-lock.json
+            components/nihongobridge-ai/package-lock.json
+            components/nihongobridge-web/package-lock.json
+      - name: Install dependencies
+        run: |
+          npm ci --prefix components/nihongobridge-knowledge
+          npm run build:package --prefix components/nihongobridge-knowledge
+          npm ci --prefix components/nihongobridge-admin
+          npm ci --prefix components/nihongobridge-ai
+          npm ci --prefix components/nihongobridge-web
+      - name: Apply production database migrations
+        env:
+          COMPONENT_ROOT: ${{ github.workspace }}/components
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: ./scripts/run-migrations.sh
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel production settings
+        working-directory: components/nihongobridge-web
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - name: Build with Vercel
+        working-directory: components/nihongobridge-web
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+      - name: Deploy prebuilt web application
+        id: deploy
+        working-directory: components/nihongobridge-web
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          deployment_url="$(vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN" | tail -n 1)"
+          test -n "$deployment_url"
+          echo "url=$deployment_url" >> "$GITHUB_OUTPUT"
+          echo "Production deployment: $deployment_url"
+      - name: Health check deployment
+        env:
+          DEPLOY_HEALTH_ATTEMPTS: ${{ vars.DEPLOY_HEALTH_ATTEMPTS || '12' }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          health_path="${{ vars.DEPLOY_HEALTH_PATH || '/dashboard' }}"
+          ./scripts/health-check.sh "${{ steps.deploy.outputs.url }}${health_path}"

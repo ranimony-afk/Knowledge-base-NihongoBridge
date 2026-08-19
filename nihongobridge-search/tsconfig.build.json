@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./lib-dist",
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": true
+  },
+  "include": ["search/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["tests", "node_modules", "lib-dist"]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@nihongobridge/search",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch search/http/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node lib-dist/http/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "indexes:configure": "tsx search/setup/configure-indexes.ts",
+    "notify:setup": "tsx search/setup/setup-notify.ts",
+    "sync:full": "tsx search/sync/sync-to-meili.ts --full",
+    "sync:incremental": "tsx search/sync/sync-to-meili.ts --incremental",
+    "sync:watch": "tsx search/sync/sync-to-meili.ts --watch",
+    "benchmark:autocomplete": "tsx scripts/benchmark-autocomplete.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "commander": "^14.0.2",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.2",
+    "meilisearch": "^0.60.0",
+    "postgres": "^3.4.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.10"
+  },
+  "engines": { "node": ">=20" },
+  "overrides": { "esbuild": "^0.25.4" }
+}

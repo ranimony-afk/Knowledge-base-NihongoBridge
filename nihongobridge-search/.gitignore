@@ -1,0 +1,9 @@
+.env
+node_modules/
+lib-dist/
+coverage/
+meili_data/
+state/*.json
+state/*.lock
+!state/.gitkeep
+*.tsbuildinfo

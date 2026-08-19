@@ -1,0 +1,46 @@
+{
+  "name": "@nihongobridge/knowledge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "seed:n5": "tsx scripts/seed-n5.ts",
+    "build:package": "tsc -p tsconfig.package.json"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "dotenv": "^16.5.0",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^5.8.3",
+    "tsx": "^4.20.6"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "esbuild": "^0.25.4"
+  },
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
+  },
+  "files": [
+    "schema",
+    "lib",
+    "drizzle",
+    "README.md"
+  ],
+  "main": "./lib/index.js"
+}
